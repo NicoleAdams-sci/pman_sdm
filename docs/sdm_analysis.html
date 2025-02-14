@@ -420,10 +420,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -516,13 +516,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong529b087">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNicoleAdamsscipmansdmtreea7529c65093f545b410a835069645b22bb3c8ad3targetblanka7529c6a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 529b087
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/NicoleAdams-sci/pman_sdm/tree/a7529c65093f545b410a835069645b22bb3c8ad3" target="_blank">a7529c6</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong529b087"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomNicoleAdamsscipmansdmtreea7529c65093f545b410a835069645b22bb3c8ad3targetblanka7529c6a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +533,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 529b087.
+The results in this page were generated with repository version
+<a href="https://github.com/NicoleAdams-sci/pman_sdm/tree/a7529c65093f545b410a835069645b22bb3c8ad3" target="_blank">a7529c6</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -545,8 +548,17 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/.DS_Store
+
 Untracked files:
-    Untracked:  analysis/sdm_analysis.Rmd
+    Untracked:  data/gadm/
+    Untracked:  data/pman_gbif_40k_occ_data.rds
+
+Unstaged changes:
+    Modified:   analysis/sdm_analysis.Rmd
 
 </code></pre>
 <p>
@@ -562,39 +574,444 @@ have uncommitted changes.
 </div>
 <div id="versions" class="tab-pane fade">
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/sdm_analysis.Rmd</code>) and HTML
+(<code>docs/sdm_analysis.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NicoleAdams-sci/pman_sdm/blob/a7529c65093f545b410a835069645b22bb3c8ad3/analysis/sdm_analysis.Rmd" target="_blank">a7529c6</a>
+</td>
+<td>
+NicoleAdams-sci
+</td>
+<td>
+2025-02-14
+</td>
+<td>
+add sdm analysis
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NicoleAdams-sci/pman_sdm/blob/2b059452fc0ddb49a22d1042cd9b3f808c586040/analysis/sdm_analysis.Rmd" target="_blank">2b05945</a>
+</td>
+<td>
+NicoleAdams-sci
+</td>
+<td>
+2025-02-14
+</td>
+<td>
+initial commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NicoleAdams-sci/pman_sdm/2b059452fc0ddb49a22d1042cd9b3f808c586040/docs/sdm_analysis.html" target="_blank">2b05945</a>
+</td>
+<td>
+NicoleAdams-sci
+</td>
+<td>
+2025-02-14
+</td>
+<td>
+initial commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting
-syntax for authoring HTML, PDF, and MS Word documents. For more details
-on using R Markdown see <a href="http://rmarkdown.rstudio.com"
-class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be
-generated that includes both content as well as the output of any
-embedded R code chunks within the document. You can embed an R code
-chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  </code></pre>
+<p>Species distribution model (SDM) for Peromyscus maniculatus based on
+a <a
+href="https://jcoliver.github.io/learn-r/011-species-distribution-models.html">tutorial</a>
+by Jeff Oliver.</p>
+<p> </p>
+<div id="load-libraries" class="section level2">
+<h2>load libraries</h2>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(terra)</code></pre>
+<pre><code>terra 1.8.10
+
+Attaching package: &#39;terra&#39;
+
+The following object is masked from &#39;package:tidyr&#39;:
+
+    extract</code></pre>
+<pre class="r"><code>library(geodata)
+library(predicts)</code></pre>
+<p> </p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="figure/sdm_analysis.Rmd/pressure-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
+<div id="read-in-gbif-observation-data" class="section level2">
+<h2>Read in GBIF observation data</h2>
+<pre class="r"><code># Download GBIF occurrence data for Peromyscus maniculatus - did previously, don&#39;t need to run again
+# library(rgbif)
+# species_name &lt;- &quot;Peromyscus maniculatus&quot;
+# occ_data &lt;- occ_search(
+#   scientificName = species_name,
+#   limit = 40000,  # Adjust based on your needs
+#   hasCoordinate = TRUE,
+#   hasGeospatialIssue = FALSE
+# )
+
+# saveRDS(occ_data, &quot;~/Documents/NicoleAdams/pman/maps/pman_gbif_40k_occ_data.rds&quot;)
+occ_data &lt;- readRDS(&quot;~/Documents/NicoleAdams/pman/maps/pman_gbif_40k_occ_data.rds&quot;)
+
+# Extract coordinates and convert to data frame
+obs_data &lt;- occ_data$data %&gt;%
+  dplyr::select(decimalLongitude, decimalLatitude) %&gt;%
+  filter(!is.na(decimalLongitude) &amp; !is.na(decimalLatitude)) %&gt;%
+  rename(&quot;longitude&quot;=decimalLongitude, &quot;latitude&quot;=decimalLatitude)</code></pre>
+<p> </p>
+</div>
+<div id="read-in-bioclimatic-variable-data" class="section level2">
+<h2>Read in bioclimatic variable data</h2>
+<pre class="r"><code># Download bioclim data - all variables, only the USA, at a 10 minutes of a degree resolution ** don&#39;t download big files to GitHub repo
+bioclim_data &lt;- worldclim_global(var = &quot;bio&quot;, res = 10, path = &quot;~/Documents/NicoleAdams/worldClimData/&quot;)
+
+# var = &quot;bio&quot;: This tells worldclim_global() that we want to download all 19 of the bioclimatic variables
+# res = 10: This is the resolution of the data we want to download; in this case, it is 10 minutes of a degree
+# path = &quot;data/&quot;: Finally, this sets the location to which the files are downloaded
+
+
+# Once downloaded, you don&#39;t need to run that first line, instead you can call the data locally
+bioclim_dir &lt;- &quot;~/Documents/NicoleAdams/worldClimData/climate/wc2.1_10m/&quot;
+bioclim_files &lt;- list.files(bioclim_dir, pattern = &quot;\\.tif$&quot;, full.names = T)
+
+# load all the files into a raster stack -- function written by claude.ai
+process_bioclim_stack &lt;- function(bioclim_files) {
+  # Check if terra package is installed and loaded
+  if (!requireNamespace(&quot;terra&quot;, quietly = TRUE)) {
+    stop(&quot;Please install the terra package: install.packages(&#39;terra&#39;)&quot;)
+  }
+  
+  # Standard bioclim variable names
+  bio_names &lt;- c(
+    &quot;bio1&quot; = &quot;Annual Mean Temperature&quot;,
+    &quot;bio2&quot; = &quot;Mean Diurnal Range&quot;,
+    &quot;bio3&quot; = &quot;Isothermality&quot;,
+    &quot;bio4&quot; = &quot;Temperature Seasonality&quot;,
+    &quot;bio5&quot; = &quot;Max Temperature of Warmest Month&quot;,
+    &quot;bio6&quot; = &quot;Min Temperature of Coldest Month&quot;,
+    &quot;bio7&quot; = &quot;Temperature Annual Range&quot;,
+    &quot;bio8&quot; = &quot;Mean Temperature of Wettest Quarter&quot;,
+    &quot;bio9&quot; = &quot;Mean Temperature of Driest Quarter&quot;,
+    &quot;bio10&quot; = &quot;Mean Temperature of Warmest Quarter&quot;,
+    &quot;bio11&quot; = &quot;Mean Temperature of Coldest Quarter&quot;,
+    &quot;bio12&quot; = &quot;Annual Precipitation&quot;,
+    &quot;bio13&quot; = &quot;Precipitation of Wettest Month&quot;,
+    &quot;bio14&quot; = &quot;Precipitation of Driest Month&quot;,
+    &quot;bio15&quot; = &quot;Precipitation Seasonality&quot;,
+    &quot;bio16&quot; = &quot;Precipitation of Wettest Quarter&quot;,
+    &quot;bio17&quot; = &quot;Precipitation of Driest Quarter&quot;,
+    &quot;bio18&quot; = &quot;Precipitation of Warmest Quarter&quot;,
+    &quot;bio19&quot; = &quot;Precipitation of Coldest Quarter&quot;
+  )
+  
+  # Create SpatRaster
+  r_stack &lt;- terra::rast(bioclim_files)
+  
+  # Set names based on file order
+  # Assuming files are numbered 1-19 in their names
+  layer_numbers &lt;- gsub(&quot;.*([0-9]{1,2}).*&quot;, &quot;\\1&quot;, bioclim_files)
+  layer_numbers &lt;- as.numeric(layer_numbers)
+  
+  # Sort files by layer number
+  sorted_indices &lt;- order(layer_numbers)
+  r_stack &lt;- r_stack[[sorted_indices]]
+  
+  # Assign standard names
+  names(r_stack) &lt;- paste0(&quot;bio&quot;, 1:terra::nlyr(r_stack))
+  
+  # Add descriptions to layer names
+  names(r_stack) &lt;- bio_names[names(r_stack)]
+  
+  return(r_stack)
+}
+
+
+bioclim_stack &lt;- process_bioclim_stack(bioclim_files)</code></pre>
+<p> </p>
+</div>
+<div id="determine-geographic-extent-of-our-data"
+class="section level2">
+<h2>Determine geographic extent of our data</h2>
+<pre class="r"><code># Find general latitudinal and longitudinal boundaries and store this information for later use. We use the ceiling() and floor() to round up and down, respectively, to the nearest integer:
+
+max_lat &lt;- ceiling(max(obs_data$latitude))
+min_lat &lt;- floor(min(obs_data$latitude))
+max_lon &lt;- ceiling(max(obs_data$longitude))
+min_lon &lt;- floor(min(obs_data$longitude))
+
+# Store boundaries in a single extent object
+geographic_extent &lt;- ext(x = c(min_lon, max_lon, min_lat, max_lat))</code></pre>
+<p> </p>
+<div id="plot-occurrence-data-for-sanity-check" class="section level3">
+<h3>Plot occurrence data for sanity check</h3>
+<pre class="r"><code># Download data with geodata&#39;s world function to use for our base map
+world_map &lt;- world(resolution = 3, path = &quot;data/&quot;)  # ** don&#39;t download big files to GitHub repo
+
+# Crop the map to our area of interest
+my_map &lt;- crop(x = world_map, y = geographic_extent)
+
+# Plot the base map
+plot(my_map,
+     axes = TRUE, 
+     col = &quot;grey95&quot;)
+
+# Add the points for individual observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = &quot;olivedrab&quot;, 
+       pch = 20, 
+       cex = 0.75)</code></pre>
+<p><img src="figure/sdm_analysis.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+</div>
+<div id="prepare-data-for-models" class="section level2">
+<h2>Prepare data for models</h2>
+<pre class="r"><code># Make an extent that is 25% larger
+sample_extent &lt;- geographic_extent * 1.25
+
+# Crop bioclim data to desired extent
+bioclim_data &lt;- crop(x = bioclim_stack, y = sample_extent)
+
+
+# Plot the first of the bioclim variables to check on cropping
+plot(bioclim_data[[1]])</code></pre>
+<p><img src="figure/sdm_analysis.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+<div id="pseudo-absence-points" class="section level2">
+<h2>Pseudo absence points</h2>
+<p>Randomly samples points from a given geographic area and treats them
+like locations where the species of interest is absent</p>
+<pre class="r"><code># create a set of 1000 background (aka pseudo-absence) points at random, and add these to our data
+
+# Set the seed for the random-number generator to ensure results are similar
+set.seed(20251402)
+
+# Randomly sample points (same number as our observed points)
+background &lt;- spatSample(x = bioclim_data,
+                         size = 1000,    # generate 1,000 pseudo-absence points
+                         values = FALSE, # don&#39;t need values
+                         na.rm = TRUE,   # don&#39;t sample from ocean
+                         xy = TRUE)      # just need coordinates
+
+# Look at first few rows of background
+# head(background)</code></pre>
+<p> </p>
+<div id="plot-pseudo-absence-points-for-sanity-check"
+class="section level3">
+<h3>Plot pseudo absence points for sanity check</h3>
+<pre class="r"><code># Plot the base map
+plot(my_map,
+     axes = TRUE, 
+     col = &quot;grey95&quot;)
+
+# Add the background points
+points(background,
+       col = &quot;grey30&quot;,
+       pch = 1,
+       cex = 0.75)
+
+# Add the points for individual observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = &quot;olivedrab&quot;, 
+       pch = 20, 
+       cex = 0.75)</code></pre>
+<p><img src="figure/sdm_analysis.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+</div>
+<div id="combine-observance-data-with-pseudo-absence-data"
+class="section level2">
+<h2>Combine observance data with pseudo absence data</h2>
+<pre class="r"><code># Pull out coordinate columns, x (longitude) first, then y (latitude) from 
+# saguaro data
+presence &lt;- obs_data[, c(&quot;longitude&quot;, &quot;latitude&quot;)]
+# Add column indicating presence
+presence$pa &lt;- 1
+
+# Convert background data to a data frame
+absence &lt;- as.data.frame(background)
+# Update column names so they match presence points
+colnames(absence) &lt;- c(&quot;longitude&quot;, &quot;latitude&quot;)
+# Add column indicating absence
+absence$pa &lt;- 0
+
+# Join data into single data frame
+all_points &lt;- rbind(presence, absence)
+
+# Reality check on data
+# head(all_points)</code></pre>
+<p> </p>
+</div>
+<div id="combine-point-data-with-climate-data" class="section level2">
+<h2>Combine point data with climate data</h2>
+<pre class="r"><code>bioclim_extract &lt;- extract(x = bioclim_data,
+                           y = all_points[, c(&quot;longitude&quot;, &quot;latitude&quot;)],
+                           ID = FALSE) # No need for an ID column
+
+#  join these extracted data back with our all_points data frame bc data frame doesn’t have the coordinate information and, more importantly, doesn’t indicate which rows are presence points vs absence
+
+# Add the point and climate datasets together
+points_climate &lt;- cbind(all_points, bioclim_extract)
+
+# Identify columns that are latitude &amp; longitude
+drop_cols &lt;- which(colnames(points_climate) %in% c(&quot;longitude&quot;, &quot;latitude&quot;))
+drop_cols # print the values as a reality check</code></pre>
+<pre><code>[1] 1 2</code></pre>
+<pre class="r"><code># Remove the geographic coordinates from the data frame
+points_climate &lt;- points_climate[, -drop_cols]</code></pre>
+<p> </p>
+</div>
+<div id="define-training-and-testing-datasets" class="section level2">
+<h2>Define training and testing datasets</h2>
+<p>Reserve 20% of the data for testing, so we use the folds() function
+from the predicts package to evenly assign each point to a random group.
+To make sure we have roughly representative sample of both presence and
+pseudo-absence points, we use the pa column to tell R that our data has
+these two sub-groups</p>
+<pre class="r"><code># Create vector indicating fold
+fold &lt;- folds(x = points_climate,
+              k = 5,
+              by = points_climate$pa)
+
+table(fold)</code></pre>
+<pre><code>fold
+   1    2    3    4    5 
+8200 8200 8200 8200 8200 </code></pre>
+<p> </p>
+<p>any observations in fold 1 will be testing data, and any observations
+in the other folds (2, 3, 4, 5) will be training data.</p>
+<p> </p>
+<div id="assign-data-to-sets" class="section level3">
+<h3>assign data to sets</h3>
+<pre class="r"><code>testing &lt;- points_climate[fold == 1, ]
+training &lt;- points_climate[fold != 1, ]</code></pre>
+<p> </p>
+</div>
+</div>
+<div id="build-model" class="section level2">
+<h2>Build model</h2>
+<pre class="r"><code># Build a model using training data
+glm_model &lt;- glm(pa ~ ., data = training, family = binomial())
+
+#  R to predict the value in the pa column based on values in all the remaining columns. That is, instead of listing the names of all the bioclimatic variables (pa ~ bio1 + bio2 + bio3...), we can use the dot (.)
+# family = binomial(): Because the response variable, pa, only takes values of 0 or 1, we need to indicate this to R</code></pre>
+<p> </p>
+</div>
+<div id="run-model-to-predict" class="section level2">
+<h2>Run model to predict</h2>
+<p>Use model just built to predict the habitat suitability across the
+entire map</p>
+<pre class="r"><code># Get predicted values from the model
+glm_predict &lt;- predict(bioclim_data, glm_model, type = &quot;response&quot;)
+
+# Print predicted values
+# plot shows the probability of occurrence of saguaros across the map. Note the values are all below 1.0.
+plot(glm_predict)</code></pre>
+<p><img src="figure/sdm_analysis.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+<div id="model-performance" class="section level2">
+<h2>Model performance</h2>
+<pre class="r"><code># Use testing data for model evaluation
+glm_eval &lt;- pa_evaluate(p = testing[testing$pa == 1, ],
+                        a = testing[testing$pa == 0, ],
+                        model = glm_model,
+                        type = &quot;response&quot;)
+
+# p = testing[testing$pa == 1, ]: In this case, p stands for presence data, so we pass all the rows in the testing data that correspond to a location where there was a saguaro present (that is, the value in the pa column is equal to 1)
+# a = testing[testing$pa == 0, ]: Similarly, a stands for absence data, so we pass all the pseudo-absence rows in our dataset (i.e. all rows where the value in the pa column is equal to 0)
+# model = glm_model: This is the model object we are evaluating. One way to think about this is that the glm_model is a calculator that takes bioclimatic data as input and provides probabilities as output
+
+# pa_evaluate() function, we pass data that we “know” what the right answer should be for these probability calculations. That is, the glm_model should predict values close to 1 for those rows that we pass to the p argument (because we know that pman occur at those locations) and it should predict values close to 0 for those rows that we pass to the a argument</code></pre>
+<p> </p>
+</div>
+<div id="define-threshold-and-plot-final-map" class="section level2">
+<h2>Define threshold and plot final map</h2>
+<pre class="r"><code># NOTES
+# The map presents a categorical classification of whether a particular point on the landscape will be suitable or not for the species of interest. This classification relies quite heavily on the value of the threshold and the pseudo-absence points
+# 
+
+# Determine minimum threshold for &quot;presence&quot;
+glm_threshold &lt;- glm_eval@thresholds$max_spec_sens
+
+
+# Plot base map
+plot(my_map, 
+     axes = TRUE, 
+     col = &quot;grey95&quot;)
+
+# Only plot areas where probability of occurrence is greater than the threshold
+plot(glm_predict &gt; glm_threshold, 
+     add = TRUE, 
+     legend = FALSE, 
+     col = c(NA, &quot;olivedrab&quot;)) # &lt;-- Update the values HERE
+
+# And add those observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = &quot;black&quot;,
+       pch = &quot;+&quot;, 
+       cex = 0.75)
+
+# Redraw those country borders
+plot(my_map, add = TRUE, border = &quot;grey5&quot;)</code></pre>
+<p><img src="figure/sdm_analysis.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -622,20 +1039,25 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.1
+ [1] predicts_0.1-17 geodata_0.6-2   terra_1.8-10    lubridate_1.9.4
+ [5] forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4     purrr_1.0.2    
+ [9] readr_2.1.5     tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1  
+[13] tidyverse_2.0.0 workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.3         knitr_1.49       
- [5] rlang_1.1.4       xfun_0.50         stringi_1.8.4     processx_3.8.5   
- [9] promises_1.3.2    jsonlite_1.8.9    glue_1.8.0        rprojroot_2.0.4  
-[13] git2r_0.35.0      htmltools_0.5.8.1 httpuv_1.6.15     ps_1.8.1         
-[17] sass_0.4.9        rmarkdown_2.29    jquerylib_0.1.4   tibble_3.2.1     
-[21] evaluate_1.0.3    fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  
-[25] whisker_0.4.1     stringr_1.5.1     compiler_4.3.0    fs_1.6.5         
-[29] pkgconfig_2.0.3   Rcpp_1.0.14       rstudioapi_0.17.1 later_1.4.1      
-[33] digest_0.6.37     R6_2.5.1          pillar_1.10.1     callr_3.7.6      
-[37] magrittr_2.0.3    bslib_0.8.0       tools_4.3.0       cachem_1.1.0     
-[41] getPass_0.2-4    </code></pre>
+ [1] sass_0.4.9        generics_0.1.3    stringi_1.8.4     hms_1.1.3        
+ [5] digest_0.6.37     magrittr_2.0.3    timechange_0.3.0  evaluate_1.0.3   
+ [9] grid_4.3.0        fastmap_1.2.0     rprojroot_2.0.4   jsonlite_1.8.9   
+[13] processx_3.8.5    whisker_0.4.1     ps_1.8.1          promises_1.3.2   
+[17] httr_1.4.7        scales_1.3.0      codetools_0.2-20  jquerylib_0.1.4  
+[21] cli_3.6.3         rlang_1.1.4       munsell_0.5.1     withr_3.0.2      
+[25] cachem_1.1.0      yaml_2.3.10       tools_4.3.0       tzdb_0.4.0       
+[29] colorspace_2.1-1  httpuv_1.6.15     vctrs_0.6.5       R6_2.5.1         
+[33] lifecycle_1.0.4   git2r_0.35.0      fs_1.6.5          pkgconfig_2.0.3  
+[37] callr_3.7.6       pillar_1.10.1     bslib_0.8.0       later_1.4.1      
+[41] gtable_0.3.6      glue_1.8.0        Rcpp_1.0.14       xfun_0.50        
+[45] tidyselect_1.2.1  rstudioapi_0.17.1 knitr_1.49        htmltools_0.5.8.1
+[49] rmarkdown_2.29    compiler_4.3.0    getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
