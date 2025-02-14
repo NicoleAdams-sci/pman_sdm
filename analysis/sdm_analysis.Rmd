@@ -2,7 +2,10 @@
 title: "sdm_analysis"
 author: "Nicole Adams"
 date: "2025-02-14"
-output: html_document
+output:
+  html_document:
+    toc: true
+    code_folding: show
 ---
 
 Species distribution model (SDM) for Peromyscus maniculatus based on a [tutorial](https://jcoliver.github.io/learn-r/011-species-distribution-models.html) by Jeff Oliver.
@@ -22,9 +25,8 @@ library(predicts)
 
 ## Read in GBIF observation data 
 ```{r, warning=FALSE}
-library(rgbif)
-
 # Download GBIF occurrence data for Peromyscus maniculatus - did previously, don't need to run again
+# library(rgbif)
 # species_name <- "Peromyscus maniculatus"
 # occ_data <- occ_search(
 #   scientificName = species_name,
@@ -38,7 +40,7 @@ occ_data <- readRDS("~/Documents/NicoleAdams/pman/maps/pman_gbif_40k_occ_data.rd
 
 # Extract coordinates and convert to data frame
 obs_data <- occ_data$data %>%
-  select(decimalLongitude, decimalLatitude) %>%
+  dplyr::select(decimalLongitude, decimalLatitude) %>%
   filter(!is.na(decimalLongitude) & !is.na(decimalLatitude)) %>%
   rename("longitude"=decimalLongitude, "latitude"=decimalLatitude)
 
@@ -137,7 +139,7 @@ geographic_extent <- ext(x = c(min_lon, max_lon, min_lat, max_lat))
 ### Plot occurrence data for sanity check
 ```{r, warning=FALSE}
 # Download data with geodata's world function to use for our base map
-world_map <- world(resolution = 3, path = "~Documents/NicoleAdams/pman/pman_sdm/data/")  # ** don't download big files to GitHub repo
+world_map <- world(resolution = 3, path = "data/")  # ** don't download big files to GitHub repo
 
 # Crop the map to our area of interest
 my_map <- crop(x = world_map, y = geographic_extent)
