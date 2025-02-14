@@ -5,26 +5,362 @@ date: "2025-02-14"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Species distribution model (SDM) for Peromyscus maniculatus based on a [tutorial](https://jcoliver.github.io/learn-r/011-species-distribution-models.html) by Jeff Oliver.
+
+&nbsp;
+
+## load libraries
+```{r, warning=FALSE}
+library(tidyverse)
+library(terra)
+library(geodata)
+library(predicts)
+
 ```
 
-## R Markdown
+&nbsp;
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Read in GBIF observation data 
+```{r, warning=FALSE}
+library(rgbif)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Download GBIF occurrence data for Peromyscus maniculatus - did previously, don't need to run again
+# species_name <- "Peromyscus maniculatus"
+# occ_data <- occ_search(
+#   scientificName = species_name,
+#   limit = 40000,  # Adjust based on your needs
+#   hasCoordinate = TRUE,
+#   hasGeospatialIssue = FALSE
+# )
 
-```{r cars}
-summary(cars)
+# saveRDS(occ_data, "~/Documents/NicoleAdams/pman/maps/pman_gbif_40k_occ_data.rds")
+occ_data <- readRDS("~/Documents/NicoleAdams/pman/maps/pman_gbif_40k_occ_data.rds")
+
+# Extract coordinates and convert to data frame
+obs_data <- occ_data$data %>%
+  select(decimalLongitude, decimalLatitude) %>%
+  filter(!is.na(decimalLongitude) & !is.na(decimalLatitude)) %>%
+  rename("longitude"=decimalLongitude, "latitude"=decimalLatitude)
+
 ```
 
-## Including Plots
+&nbsp;
 
-You can also embed plots, for example:
+## Read in bioclimatic variable data
+```{r, warning=FALSE}
+# Download bioclim data - all variables, only the USA, at a 10 minutes of a degree resolution ** don't download big files to GitHub repo
+bioclim_data <- worldclim_global(var = "bio", res = 10, path = "~/Documents/NicoleAdams/worldClimData/")
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# var = "bio": This tells worldclim_global() that we want to download all 19 of the bioclimatic variables
+# res = 10: This is the resolution of the data we want to download; in this case, it is 10 minutes of a degree
+# path = "data/": Finally, this sets the location to which the files are downloaded
+
+
+# Once downloaded, you don't need to run that first line, instead you can call the data locally
+bioclim_dir <- "~/Documents/NicoleAdams/worldClimData/climate/wc2.1_10m/"
+bioclim_files <- list.files(bioclim_dir, pattern = "\\.tif$", full.names = T)
+
+# load all the files into a raster stack -- function written by claude.ai
+process_bioclim_stack <- function(bioclim_files) {
+  # Check if terra package is installed and loaded
+  if (!requireNamespace("terra", quietly = TRUE)) {
+    stop("Please install the terra package: install.packages('terra')")
+  }
+  
+  # Standard bioclim variable names
+  bio_names <- c(
+    "bio1" = "Annual Mean Temperature",
+    "bio2" = "Mean Diurnal Range",
+    "bio3" = "Isothermality",
+    "bio4" = "Temperature Seasonality",
+    "bio5" = "Max Temperature of Warmest Month",
+    "bio6" = "Min Temperature of Coldest Month",
+    "bio7" = "Temperature Annual Range",
+    "bio8" = "Mean Temperature of Wettest Quarter",
+    "bio9" = "Mean Temperature of Driest Quarter",
+    "bio10" = "Mean Temperature of Warmest Quarter",
+    "bio11" = "Mean Temperature of Coldest Quarter",
+    "bio12" = "Annual Precipitation",
+    "bio13" = "Precipitation of Wettest Month",
+    "bio14" = "Precipitation of Driest Month",
+    "bio15" = "Precipitation Seasonality",
+    "bio16" = "Precipitation of Wettest Quarter",
+    "bio17" = "Precipitation of Driest Quarter",
+    "bio18" = "Precipitation of Warmest Quarter",
+    "bio19" = "Precipitation of Coldest Quarter"
+  )
+  
+  # Create SpatRaster
+  r_stack <- terra::rast(bioclim_files)
+  
+  # Set names based on file order
+  # Assuming files are numbered 1-19 in their names
+  layer_numbers <- gsub(".*([0-9]{1,2}).*", "\\1", bioclim_files)
+  layer_numbers <- as.numeric(layer_numbers)
+  
+  # Sort files by layer number
+  sorted_indices <- order(layer_numbers)
+  r_stack <- r_stack[[sorted_indices]]
+  
+  # Assign standard names
+  names(r_stack) <- paste0("bio", 1:terra::nlyr(r_stack))
+  
+  # Add descriptions to layer names
+  names(r_stack) <- bio_names[names(r_stack)]
+  
+  return(r_stack)
+}
+
+
+bioclim_stack <- process_bioclim_stack(bioclim_files)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+&nbsp;
+
+## Determine geographic extent of our data
+```{r, warning=FALSE}
+# Find general latitudinal and longitudinal boundaries and store this information for later use. We use the ceiling() and floor() to round up and down, respectively, to the nearest integer:
+
+max_lat <- ceiling(max(obs_data$latitude))
+min_lat <- floor(min(obs_data$latitude))
+max_lon <- ceiling(max(obs_data$longitude))
+min_lon <- floor(min(obs_data$longitude))
+
+# Store boundaries in a single extent object
+geographic_extent <- ext(x = c(min_lon, max_lon, min_lat, max_lat))
+
+```
+
+&nbsp;
+
+### Plot occurrence data for sanity check
+```{r, warning=FALSE}
+# Download data with geodata's world function to use for our base map
+world_map <- world(resolution = 3, path = "~Documents/NicoleAdams/pman/pman_sdm/data/")  # ** don't download big files to GitHub repo
+
+# Crop the map to our area of interest
+my_map <- crop(x = world_map, y = geographic_extent)
+
+# Plot the base map
+plot(my_map,
+     axes = TRUE, 
+     col = "grey95")
+
+# Add the points for individual observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = "olivedrab", 
+       pch = 20, 
+       cex = 0.75)
+```
+
+&nbsp;
+
+## Prepare data for models
+```{r, warning=FALSE}
+# Make an extent that is 25% larger
+sample_extent <- geographic_extent * 1.25
+
+# Crop bioclim data to desired extent
+bioclim_data <- crop(x = bioclim_stack, y = sample_extent)
+
+
+# Plot the first of the bioclim variables to check on cropping
+plot(bioclim_data[[1]])
+```
+
+&nbsp;
+
+## Pseudo absence points
+Randomly samples points from a given geographic area and treats them like locations where the species of interest is absent
+```{r, warning=FALSE}
+# create a set of 1000 background (aka pseudo-absence) points at random, and add these to our data
+
+# Set the seed for the random-number generator to ensure results are similar
+set.seed(20251402)
+
+# Randomly sample points (same number as our observed points)
+background <- spatSample(x = bioclim_data,
+                         size = 1000,    # generate 1,000 pseudo-absence points
+                         values = FALSE, # don't need values
+                         na.rm = TRUE,   # don't sample from ocean
+                         xy = TRUE)      # just need coordinates
+
+# Look at first few rows of background
+# head(background)
+
+```
+
+&nbsp;
+
+### Plot pseudo absence points for sanity check
+```{r, warning=FALSE}
+# Plot the base map
+plot(my_map,
+     axes = TRUE, 
+     col = "grey95")
+
+# Add the background points
+points(background,
+       col = "grey30",
+       pch = 1,
+       cex = 0.75)
+
+# Add the points for individual observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = "olivedrab", 
+       pch = 20, 
+       cex = 0.75)
+```
+
+&nbsp;
+
+## Combine observance data with pseudo absence data
+```{r, warning=FALSE}
+# Pull out coordinate columns, x (longitude) first, then y (latitude) from 
+# saguaro data
+presence <- obs_data[, c("longitude", "latitude")]
+# Add column indicating presence
+presence$pa <- 1
+
+# Convert background data to a data frame
+absence <- as.data.frame(background)
+# Update column names so they match presence points
+colnames(absence) <- c("longitude", "latitude")
+# Add column indicating absence
+absence$pa <- 0
+
+# Join data into single data frame
+all_points <- rbind(presence, absence)
+
+# Reality check on data
+# head(all_points)
+```
+
+&nbsp;
+
+## Combine point data with climate data
+```{r, warning=FALSE}
+bioclim_extract <- extract(x = bioclim_data,
+                           y = all_points[, c("longitude", "latitude")],
+                           ID = FALSE) # No need for an ID column
+
+#  join these extracted data back with our all_points data frame bc data frame doesn’t have the coordinate information and, more importantly, doesn’t indicate which rows are presence points vs absence
+
+# Add the point and climate datasets together
+points_climate <- cbind(all_points, bioclim_extract)
+
+# Identify columns that are latitude & longitude
+drop_cols <- which(colnames(points_climate) %in% c("longitude", "latitude"))
+drop_cols # print the values as a reality check
+
+# Remove the geographic coordinates from the data frame
+points_climate <- points_climate[, -drop_cols]
+
+```
+
+&nbsp;
+
+##  Define training and testing datasets
+Reserve 20% of the data for testing, so we use the folds() function from the predicts package to evenly assign each point to a random group. To make sure we have roughly representative sample of both presence and pseudo-absence points, we use the pa column to tell R that our data has these two sub-groups
+```{r, warning=FALSE}
+# Create vector indicating fold
+fold <- folds(x = points_climate,
+              k = 5,
+              by = points_climate$pa)
+
+table(fold)
+
+```
+
+&nbsp;
+
+any observations in fold 1 will be testing data, and any observations in the other folds (2, 3, 4, 5) will be training data.
+
+&nbsp;
+
+### assign data to sets
+```{r, warning=FALSE}
+testing <- points_climate[fold == 1, ]
+training <- points_climate[fold != 1, ]
+```
+
+&nbsp;
+
+## Build model
+```{r, warning=FALSE}
+# Build a model using training data
+glm_model <- glm(pa ~ ., data = training, family = binomial())
+
+#  R to predict the value in the pa column based on values in all the remaining columns. That is, instead of listing the names of all the bioclimatic variables (pa ~ bio1 + bio2 + bio3...), we can use the dot (.)
+# family = binomial(): Because the response variable, pa, only takes values of 0 or 1, we need to indicate this to R
+
+```
+
+&nbsp;
+
+## Run model to predict
+Use model just built to predict the habitat suitability across the entire map
+```{r, warning=FALSE}
+# Get predicted values from the model
+glm_predict <- predict(bioclim_data, glm_model, type = "response")
+
+# Print predicted values
+# plot shows the probability of occurrence of saguaros across the map. Note the values are all below 1.0.
+plot(glm_predict)
+```
+
+&nbsp;
+
+## Model performance
+```{r, warning=FALSE}
+# Use testing data for model evaluation
+glm_eval <- pa_evaluate(p = testing[testing$pa == 1, ],
+                        a = testing[testing$pa == 0, ],
+                        model = glm_model,
+                        type = "response")
+
+# p = testing[testing$pa == 1, ]: In this case, p stands for presence data, so we pass all the rows in the testing data that correspond to a location where there was a saguaro present (that is, the value in the pa column is equal to 1)
+# a = testing[testing$pa == 0, ]: Similarly, a stands for absence data, so we pass all the pseudo-absence rows in our dataset (i.e. all rows where the value in the pa column is equal to 0)
+# model = glm_model: This is the model object we are evaluating. One way to think about this is that the glm_model is a calculator that takes bioclimatic data as input and provides probabilities as output
+
+# pa_evaluate() function, we pass data that we “know” what the right answer should be for these probability calculations. That is, the glm_model should predict values close to 1 for those rows that we pass to the p argument (because we know that pman occur at those locations) and it should predict values close to 0 for those rows that we pass to the a argument
+
+```
+
+&nbsp;
+
+## Define threshold and plot final map
+```{r, warning=FALSE}
+# NOTES
+# The map presents a categorical classification of whether a particular point on the landscape will be suitable or not for the species of interest. This classification relies quite heavily on the value of the threshold and the pseudo-absence points
+# 
+
+# Determine minimum threshold for "presence"
+glm_threshold <- glm_eval@thresholds$max_spec_sens
+
+
+# Plot base map
+plot(my_map, 
+     axes = TRUE, 
+     col = "grey95")
+
+# Only plot areas where probability of occurrence is greater than the threshold
+plot(glm_predict > glm_threshold, 
+     add = TRUE, 
+     legend = FALSE, 
+     col = c(NA, "olivedrab")) # <-- Update the values HERE
+
+# And add those observations
+points(x = obs_data$longitude, 
+       y = obs_data$latitude, 
+       col = "black",
+       pch = "+", 
+       cex = 0.75)
+
+# Redraw those country borders
+plot(my_map, add = TRUE, border = "grey5")
+```
+
